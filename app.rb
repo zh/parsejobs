@@ -1,14 +1,12 @@
 # encoding: utf-8
 
-%w[json sinatra sinatra/synchrony faraday].map {|lib| require lib}
+%w[json sinatra em-synchrony faraday].map {|lib| require lib}
 Faraday.default_adapter = :em_synchrony
 
 ENV['RACK_ENV'] ||= "production"
 APP_ROOT = File.expand_path(File.dirname(__FILE__))
 
 class ParseJobs < Sinatra::Base
-  register Sinatra::Synchrony
-
   configure do
     disable :sessions
     enable :logging
