@@ -32,14 +32,13 @@ class ParseJobs < Sinatra::Base
     links = []
     params[:links].each_line { |line| links << line.chomp }
     payload[:urls] = links.compact.delete_if {|x| x.empty? }
-    api = Faraday.new(:url => 'https://www.parse.com') do |builder|
-      builder.response :logger
-    end
-    api.post do |req|
+    api = Faraday.new(:url => 'https://www.parse.com')
+    response = api.post do |req|
       req.url '/jobs/apply'
       req.headers['Content-Type'] = 'application/json'
       req.body = payload.to_json
     end
+    puts response.inspect
     redirect '/'
   end
 
