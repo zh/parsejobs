@@ -11,6 +11,7 @@ class ParseJobs < Sinatra::Base
 
   configure do
     disable :sessions
+    enable :logging
     set :environment, ENV['RACK_ENV']
     set :public_folder, File.join(APP_ROOT, "public")
   end
@@ -31,7 +32,9 @@ class ParseJobs < Sinatra::Base
     links = []
     params[:links].each_line { |line| links << line.chomp }
     payload[:urls] = links.compact.delete_if {|x| x.empty? }
-    api = Faraday.new(:url => 'https://www.parse.com')
+    api = Faraday.new(:url => 'https://www.parse.com') do |builder|
+      builder.response :logger
+    end
     api.post do |req|
       req.url '/jobs/apply'
       req.headers['Content-Type'] = 'application/json'
