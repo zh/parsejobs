@@ -23,6 +23,12 @@
 <div class="container">
   <div class="row">
     <div class="span12">
+    <% if flash[:notice] %>
+    <div class="alert-message success"><%= flash[:notice] %></div>
+    <% end%>
+    <% if flash[:error] %>
+    <div class="alert-message error"><%= flash[:error] %></div>
+    <% end%>
     <%= yield %>
     </div>
   </div>
